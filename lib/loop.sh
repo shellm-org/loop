@@ -1,5 +1,5 @@
-if shellm-ndef __LOOP_SH; then
-shellm-define __LOOP_SH "
+if shellm-ndef; then
+shellm-define "
   loop
   loop_alive
   loop_control
