@@ -1,18 +1,3 @@
-if shellm-ndef; then
-shellm-define "
-  loop
-  loop_alive
-  loop_control
-  loop_dead
-  loop_exists
-  loop_init
-  loop_pause
-  loop_paused
-  loop_resume
-  loop_stop
-  loop_wait
-  "
-
 shellm-include core/init/data.sh
 
 ## \brief Control the loops within your scripts (pause/stop them).
@@ -149,5 +134,3 @@ loop() {
     wait) loop_wait "${arg0}" "${var}" ;;
   esac
 }
-
-fi  #  __LOOP_SH
