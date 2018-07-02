@@ -2,7 +2,7 @@
 
 ## \brief Control the flow of your loops (pause/resume/etc.).
 
-shellm-include shellm/shellm-shellman/lib/shellman.sh
+shellm-include shellm/shellman/lib/shellman.sh
 
 [ $# -eq 0 ] && shellman_usage
 
