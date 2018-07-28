@@ -31,5 +31,5 @@ As a library:
 # with basher's include
 include shellm/loop lib/loop.sh
 # with shellm's include
-shellm-include shellm/loop lib/loop.sh
+shellm-source shellm/loop lib/loop.sh
 ```

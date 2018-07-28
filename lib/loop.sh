@@ -1,4 +1,4 @@
-shellm-include core/init/data.sh
+shellm-source core/init/data.sh
 
 ## \brief Control the loops within your scripts (pause/stop them).
 ## \desc The loop.sh library provides functions to control loops within shells scripts.
