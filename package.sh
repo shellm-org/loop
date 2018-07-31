@@ -1,5 +1,5 @@
-BINS="bin/loop"  #:bin/other-script
+BINS="bin/loop"
 LIBS="lib/loop.sh"
-DEPS=gitlab.com/shellm/shellman  #:user2/repo2
-BASH_COMPLETIONS="cmp/loop.completion.bash"
-ZSH_COMPLETIONS="cmp/loop.completion.zsh"
+DEPS="gitlab.com/shellm/core"
+# BASH_COMPLETIONS="cmp/loop.completion.bash"
+# ZSH_COMPLETIONS="cmp/loop.completion.zsh"
