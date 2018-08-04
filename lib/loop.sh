@@ -1,4 +1,4 @@
-shellm-source core/init/data.sh
+shellm-source shellm/home
 
 ## \brief Control the loops within your scripts (pause/stop them).
 ## \desc The loop.sh library provides functions to control loops within shells scripts.
@@ -9,7 +9,8 @@ shellm-source core/init/data.sh
 ## Here is an example of usage in a script called "my-script":
 ##
 ##     #!/bin/bash
-##     include flow/loop.sh
+##     source $(shellm-core-path)
+##     shellm-source shellm/loop
 ##
 ##     loop init "my-loop"
 ##
@@ -33,7 +34,7 @@ shellm-source core/init/data.sh
 ## (nested loops) at the same time, or make different scripts dependents from each other.
 
 loop_alive() {
-  ! loop_dead "$1" "$2"
+  loop_exists "$1" "$2" && ! loop_paused "$1" "$2"
 }
 
 loop_control() {
@@ -50,12 +51,12 @@ loop_dead() {
 }
 
 loop_exists() {
-  [ -f "$(get_data_dir loop)/$1_$2" ]
+  [ -f "${__loop_datadir}/$1_$2" ]
 }
 
 loop_init() {
   if ! loop_exists "$1" "$2"; then
-    touch "$(get_data_dir loop)/$1_$2"
+    touch "${__loop_datadir}/$1_$2"
   else
     return 1
   fi
@@ -63,26 +64,28 @@ loop_init() {
 
 loop_pause() {
   if loop_exists "$1" "$2"; then
-    echo "paused" > "$(get_data_dir loop)/$1_$2"
+    echo "paused" > "${__loop_datadir}/$1_$2"
   else
     return 1
   fi
 }
 
 loop_paused() {
-  loop_exists "$1" "$2" && grep -q paused "$(get_data_dir loop)/$1_$2"
+  if ! grep -q paused "${__loop_datadir}/$1_$2" 2>/dev/null; then
+    return 1
+  fi
 }
 
 loop_resume() {
   if loop_exists "$1" "$2"; then
-    echo "" > "$(get_data_dir loop)/$1_$2"
+    echo "" > "${__loop_datadir}/$1_$2"
   else
     return 1
   fi
 }
 
 loop_stop() {
-  rm "$(get_data_dir loop)/$1_$2" 2>/dev/null
+  rm "${__loop_datadir}/$1_$2" 2>/dev/null
 }
 
 loop_wait() {
@@ -94,7 +97,7 @@ loop_wait() {
 ## \fn loop
 ## \brief Pause (resume), stop or check that a loop is alive or dead.
 loop() {
-  init_data loop >/dev/null
+  __loop_datadir="${__loop_datadir:-$(home-data loop)}"
 
   local loop_command="$1"
   shift
@@ -105,7 +108,7 @@ loop() {
     arg0="$1"
     var="$2"
   else
-    arg0="$0"
+    arg0="$(basename "$0")"
     var="$1"
   fi
 

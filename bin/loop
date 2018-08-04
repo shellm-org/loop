@@ -2,16 +2,22 @@
 
 ## \brief Control the flow of your loops (pause/resume/etc.).
 
-shellm-source shellm/shellman/lib/shellman.sh
+source $(shellm-core-path)
+shellm-source shellm/loop
 
-[ $# -eq 0 ] && shellman_usage
+if [ $# -eq 0 ]; then
+  doc --print-usage "$0"
+  exit 1
+fi
 
 main() {
   case "$1" in
     ## \option -h, --help
     ## Print this help and exit.
-    -h|--help) shellman "$0"; exit 0 ;;
+    -h|--help) doc --print-help "$0"; exit 0 ;;
   esac
+
+  loop "$@"
 }
 
 ## \usage loop [-h]
