@@ -15,6 +15,24 @@ main() {
     ## \option -h, --help
     ## Print this help and exit.
     -h|--help) doc --print-help "$0"; exit 0 ;;
+
+    control)
+      echo "loop: in order to use 'loop control'," >&2
+      echo "you must source the loop library with" >&2
+      echo "shellm-source shellm/loop" >&2
+      echo >&2
+      echo "This is because 'loop control' uses the 'break' keyword" >&2
+      echo "and therefore must run in the current process, not in a subprocess." >&2
+      echo >&2
+      echo "Another solution is to replace it with the following:" >&2
+      echo >&2
+      echo '    if loop paused loop_name; then' >&2
+      echo '      loop wait loop_name' >&2
+      echo '    elif loop dead loop_name; then' >&2
+      echo '      break' >&2
+      echo '    fi' >&2
+      exit 1
+    ;;
   esac
 
   loop "$@"

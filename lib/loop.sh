@@ -125,5 +125,9 @@ loop() {
     resume) loop_resume "${var}" ;;
     stop) loop_stop "${var}" ;;
     wait) loop_wait "${var}" ;;
+    *)
+      echo "loop: unknow command '${loop_command}'" >&2
+      return 1
+    ;;
   esac
 }
