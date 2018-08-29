@@ -4,32 +4,32 @@
 ## location or terminal. It is therefore possible to pause a script from another terminal
 ## without hitting Control-Z in the shell process running the script.
 ##
-## Here is an example of usage in a script:
-##
-##     #!/bin/bash
-##     source $(shellm-core-path)
-##     shellm-source shellm/loop
-##
-##     loop init "script.loop"
-##
-##     i=0
-##     while true; do
-##
-##       loop control "script.loop"
-##
-##       echo "$i"
-##       (( i++ ))
-##       sleep 1
-##     done
-##
-## And the commands used in another shell to control the execution of "my-loop":
-##
-##     $ loop pause "script.loop"
-##     $ loop resume "script.loop"
-##     $ loop stop "script.loop"
-##
 ## This execution control mechanism can even allow to control several loops and inner loops
 ## (nested loops) at the same time, or make different scripts dependents on each other.
+
+## \example In a script:
+## \example-code bash
+##   #!/bin/bash
+##   source $(shellm-core-path)
+##   shellm-source shellm/loop
+##
+##   loop init "script.loop"
+##
+##   i=0
+##   while true; do
+##
+##     loop control "script.loop"
+##
+##     echo "$i"
+##     (( i++ ))
+##     sleep 1
+##   done
+
+## \example Then, from another terminal:
+## \example-code console
+##   $ loop pause "script.loop"
+##   $ loop resume "script.loop"
+##   $ loop stop "script.loop"
 
 loop_alive() {
   loop_exists "$1" && ! loop_paused "$1"
