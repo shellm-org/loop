@@ -1,4 +1,4 @@
-# Welcome to the {{ project }} wiki!
+## [Home](home)
 
 {% if scripts %}
 ## Scripts
