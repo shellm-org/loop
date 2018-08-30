@@ -4,7 +4,7 @@
 ## Scripts
 {% if scripts is string %}{% set scripts=scripts.split() %}{% endif %}
 {% for script in scripts %}
-- [{{ script }}](Scripts/{{ script }}.)
+- [{{ script }}](Scripts/{{ script }})
 {% endfor %}
 {% endif %}
 
