@@ -1,7 +1,7 @@
 .if n.ad l
 .nh
 
-.TH loop.sh 1 "2018-08-29" "Shellman 0.2.2" "User Commands"
+.TH loop.sh 1 "2018-08-30" "Shellman 0.2.2" "User Commands"
 
 .SH "NAME"
 loop.sh \- Control the loops within your scripts (pause/stop them).
@@ -12,29 +12,31 @@ When used, it allows to control the execution of already running loops from what
 location or terminal. It is therefore possible to pause a script from another terminal
 without hitting Control-Z in the shell process running the script.
 
-Here is an example of usage in a script:
-
-    #!/bin/bash
-    source $(shellm-core-path)
-    shellm-source shellm/loop
-
-    loop init "script.loop"
-
-    i=0
-    while true; do
-
-      loop control "script.loop"
-
-      echo "$i"
-      (( i++ ))
-      sleep 1
-    done
-
-And the commands used in another shell to control the execution of "my-loop":
-
-    $ loop pause "script.loop"
-    $ loop resume "script.loop"
-    $ loop stop "script.loop"
-
 This execution control mechanism can even allow to control several loops and inner loops
 (nested loops) at the same time, or make different scripts dependents on each other.
+
+.SH "EXAMPLES"
+.IP "\fBIn a script:\fR" 4
+
+  #!/bin/bash
+  source $(shellm-core-path)
+  shellm-source shellm/loop
+
+  loop init "script.loop"
+
+  i=0
+  while true; do
+
+    loop control "script.loop"
+
+    echo "$i"
+    (( i++ ))
+    sleep 1
+  done
+
+
+.IP "\fBThen, from another terminal:\fR" 4
+
+  $ loop pause "script.loop"
+  $ loop resume "script.loop"
+  $ loop stop "script.loop"
