@@ -1,10 +1,5 @@
 .PHONY: rmdoc
 
-define p addprefix
-endef
-define s addsuffix
-endef
-
 BINDIR := bin
 LIBDIR := lib
 MANDIR := man
@@ -13,8 +8,8 @@ WIKIDIR := wiki
 SCRIPTS := $(sort $(shell cd $(BINDIR) && ls))
 LIBRARIES := $(sort $(shell cd $(LIBDIR) && ls))
 
-MANPAGES := $(p $(MANDIR)/,$(s .1,$(SCRIPTS)) $(s .3,$(LIBRARIES)))
-WIKIPAGES := $(p $(WIKIDIR)/,$(p Scripts/,$(s .md,$(SCRIPTS))) $(p Library/,$(s .md,$(LIBRARIES))))
+MANPAGES := $(addprefix $(MANDIR)/,$(addsuffix .1,$(SCRIPTS)) $(addsuffix .3,$(LIBRARIES)))
+WIKIPAGES := $(addprefix $(WIKIDIR)/,$(addprefix Scripts/,$(addsuffix .md,$(SCRIPTS))) $(addprefix Library/,$(addsuffix .md,$(LIBRARIES))))
 
 ifeq ($(PREFIX), )
 PREFIX := /usr/local
