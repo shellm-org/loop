@@ -31,10 +31,25 @@
 ##   $ loop resume "script.loop"
 ##   $ loop stop "script.loop"
 
+## \function loop_alive <NAME>
+## \function-brief Check if the loop is alive (exists and not paused).
+## \function-argument NAME The name of the loop to check.
+## \function-return 0 The loop is alive.
+## \function-return 1 The loop is not alive.
 loop_alive() {
   loop_exists "$1" && ! loop_paused "$1"
 }
 
+## \function loop_control <NAME>
+## \function-brief Wait as long as the loop is paused, break when it's dead, continue otherwise.
+## You must use this function in a loop in order for the break keyword
+## to have effect. This function is a shortcut for:
+##   if loop_paused $NAME; then
+##     loop_wait $NAME
+##   elif loop_dead $NAME; then
+##     break
+##   fi
+## \function-argument NAME The name of the loop to control.
 loop_control() {
   if loop_paused "$1"; then
     loop_wait "$1"
@@ -44,22 +59,44 @@ loop_control() {
   fi
 }
 
+## \function loop_dead <NAME>
+## \function-brief Check if the loop is dead.
+## \function-argument NAME The name of the loop to check.
+## \function-return 0 The loop is dead.
+## \function-return 1 The loop is not dead.
 loop_dead() {
   ! loop_exists "$1"
 }
 
+## \function loop_exists <NAME>
+## \function-brief Check if the loop exists.
+## \function-argument NAME The name of the loop to check.
+## \function-return 0 The loop exists.
+## \function-return 1 The loop does not exist.
 loop_exists() {
   [ -f "${__loop_datadir}/$1" ]
 }
 
+## \function loop_init <NAME>
+## \function-brief Initialize a loop.
+## \function-argument NAME The name of the loop to initialize.
+## \function-return 0 The loop was correctly initialized.
+## \function-return 1 The loop was already initialized.
+## \function-stderr A warning when the loop was already initialized.
 loop_init() {
   if ! loop_exists "$1"; then
     touch "${__loop_datadir}/$1"
   else
+    echo "loop: '$1' already initialized" >&2
     return 1
   fi
 }
 
+## \function loop_pause <NAME>
+## \function-brief Pause a loop.
+## \function-argument NAME The name of the loop to pause.
+## \function-return 0 The loop existed and was paused.
+## \function-return 1 The loop did not exist.
 loop_pause() {
   if loop_exists "$1"; then
     echo "paused" > "${__loop_datadir}/$1"
@@ -68,12 +105,22 @@ loop_pause() {
   fi
 }
 
+## \function loop_paused <NAME>
+## \function-brief Check if the loop is paused.
+## \function-argument NAME The name of the loop to check.
+## \function-return 0 The loop is paused.
+## \function-return 1 The loop is not paused.
 loop_paused() {
   if ! grep -q paused "${__loop_datadir}/$1" 2>/dev/null; then
     return 1
   fi
 }
 
+## \function loop_resume <NAME>
+## \function-brief Resume a loop.
+## \function-argument NAME The name of the loop to resume.
+## \function-return 0 The loop existed and was resumed.
+## \function-return 1 The loop did not exist.
 loop_resume() {
   if loop_exists "$1"; then
     echo "" > "${__loop_datadir}/$1"
@@ -82,18 +129,42 @@ loop_resume() {
   fi
 }
 
+## \function loop_stop <NAME>
+## \function-brief Stop a loop.
+## \function-argument NAME The name of the loop to stop.
+## \function-return 0 The loop existed and was stopped.
+## \function-return 1 The loop did not exist.
 loop_stop() {
   rm "${__loop_datadir}/$1" 2>/dev/null
 }
 
+## \function loop_wait <NAME>
+## \function-brief Wait as long as a loop is paused.
+## \function-argument NAME The name of the loop to wait.
 loop_wait() {
   while loop_paused "$1"; do
     sleep 1;
   done
 }
 
-## \fn loop
-## \brief Pause (resume), stop or check that a loop is alive or dead.
+## \function loop <COMMAND> <NAME>
+## \function-brief Main wrapper function accepting subcommands.
+## COMMAND can be the following:
+##
+##   - `alive`: return True if the loop is alive, False otherwise.
+##   - `control`: shortcut for loop paused? wait. loop dead? break.
+##   - `dead`: return True if the loop is dead, False otherwise.
+##   - `exists`: return True if loop has been initialized, False otherwise.
+##   - `init`: init a new loop control and start it.
+##   - `pause`: pause the loop. It will wait until resumed or stopped.
+##   - `resume`: resume the loop.
+##   - `stop`: definitely stop the loop.
+##   - `wait`: wait as long as loop is paused.
+## \function-argument COMMAND The subcommand to run.
+## \function-argument NAME The name of the loop on which to act.
+## \function-return ? The return code of the subcommand.
+## \function-return 1 When the subcommand is unknown.
+## \function-stderr Warning when unknown subcommmand.
 loop() {
   __loop_datadir="/tmp/loop"
 
@@ -102,18 +173,6 @@ loop() {
   local loop_command="$1"
   local var="$2"
 
-  ## \param COMMAND
-  ## COMMAND can be the following:
-  ##
-  ##     - `alive`: return True if the loop is alive, False otherwise.
-  ##     - `control`: shortcut for loop paused? wait. loop dead? break.
-  ##     - `dead`: return True if the loop is dead, False otherwise.
-  ##     - `exists`: return True if loop has been initialized, False otherwise.
-  ##     - `init`: init a new loop control and start it.
-  ##     - `pause`: pause the loop. It will wait until resumed or stopped.
-  ##     - `resume`: resume the loop.
-  ##     - `stop`: definitely stop the loop.
-  ##     - `wait`: wait as long as loop is paused.
   case "${loop_command}" in
     alive) loop_alive "${var}" ;;
     control) loop_control "${var}" ;;

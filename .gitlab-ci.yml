@@ -1,0 +1,29 @@
+stages:
+  - quality
+
+style:
+  image: shellm/ci:latest
+  stage: quality
+  before_script:
+    - basher install gitlab.com/shellm/core
+    - basher link .
+  script:
+    - make check-style
+
+documentation:
+  image: shellm/ci:latest
+  stage: quality
+  before_script:
+    - basher install gitlab.com/shellm/doc
+    - basher link .
+  script:
+    - make check-documentation
+
+compatibility:
+  image: shellm/ci:latest
+  stage: quality
+  before_script:
+    - basher install gitlab.com/shellm/core
+    - basher link .
+  script:
+    - make check-compatibility

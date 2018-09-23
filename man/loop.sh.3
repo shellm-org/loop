@@ -1,7 +1,7 @@
 .if n.ad l
 .nh
 
-.TH loop.sh 1 "2018-08-30" "Shellman 0.2.2" "User Commands"
+.TH loop.sh 1 "2018-09-23" "shellman 0.3.4" "User Commands"
 
 .SH "NAME"
 loop.sh \- Control the loops within your scripts (pause/stop them).
@@ -11,9 +11,134 @@ The loop.sh library provides functions to control loops within shells scripts.
 When used, it allows to control the execution of already running loops from whatever
 location or terminal. It is therefore possible to pause a script from another terminal
 without hitting Control-Z in the shell process running the script.
-
 This execution control mechanism can even allow to control several loops and inner loops
 (nested loops) at the same time, or make different scripts dependents on each other.
+
+.SH "FUNCTIONS"
+.IP "\fBloop_alive <NAME>\fR" 4
+Check if the loop is alive (exists and not paused).
+
+.I Arguments
+    \fBNAME\fR - The name of the loop to check.
+
+.I Return codes
+    \fB0\fR - The loop is alive.
+    \fB1\fR - The loop is not alive.
+
+.IP "\fBloop_control <NAME>\fR" 4
+Wait as long as the loop is paused, break when it's dead, continue otherwise.
+
+You must use this function in a loop in order for the break keyword
+to have effect. This function is a shortcut for:
+  if loop_paused $NAME; then
+    loop_wait $NAME
+  elif loop_dead $NAME; then
+    break
+  fi
+
+.I Arguments
+    \fBNAME\fR - The name of the loop to control.
+
+.IP "\fBloop_dead <NAME>\fR" 4
+Check if the loop is dead.
+
+.I Arguments
+    \fBNAME\fR - The name of the loop to check.
+
+.I Return codes
+    \fB0\fR - The loop is dead.
+    \fB1\fR - The loop is not dead.
+
+.IP "\fBloop_exists <NAME>\fR" 4
+Check if the loop exists.
+
+.I Arguments
+    \fBNAME\fR - The name of the loop to check.
+
+.I Return codes
+    \fB0\fR - The loop exists.
+    \fB1\fR - The loop does not exist.
+
+.IP "\fBloop_init <NAME>\fR" 4
+Initialize a loop.
+
+.I Arguments
+    \fBNAME\fR - The name of the loop to initialize.
+
+.I Return codes
+    \fB0\fR - The loop was correctly initialized.
+    \fB1\fR - The loop was already initialized.
+
+
+.IP "\fBloop_pause <NAME>\fR" 4
+Pause a loop.
+
+.I Arguments
+    \fBNAME\fR - The name of the loop to pause.
+
+.I Return codes
+    \fB0\fR - The loop existed and was paused.
+    \fB1\fR - The loop did not exist.
+
+.IP "\fBloop_paused <NAME>\fR" 4
+Check if the loop is paused.
+
+.I Arguments
+    \fBNAME\fR - The name of the loop to check.
+
+.I Return codes
+    \fB0\fR - The loop is paused.
+    \fB1\fR - The loop is not paused.
+
+.IP "\fBloop_resume <NAME>\fR" 4
+Resume a loop.
+
+.I Arguments
+    \fBNAME\fR - The name of the loop to resume.
+
+.I Return codes
+    \fB0\fR - The loop existed and was resumed.
+    \fB1\fR - The loop did not exist.
+
+.IP "\fBloop_stop <NAME>\fR" 4
+Stop a loop.
+
+.I Arguments
+    \fBNAME\fR - The name of the loop to stop.
+
+.I Return codes
+    \fB0\fR - The loop existed and was stopped.
+    \fB1\fR - The loop did not exist.
+
+.IP "\fBloop_wait <NAME>\fR" 4
+Wait as long as a loop is paused.
+
+.I Arguments
+    \fBNAME\fR - The name of the loop to wait.
+
+.IP "\fBloop <COMMAND> <NAME>\fR" 4
+Main wrapper function accepting subcommands.
+
+COMMAND can be the following:
+  - `alive`: return True if the loop is alive, False otherwise.
+  - `control`: shortcut for loop paused? wait. loop dead? break.
+  - `dead`: return True if the loop is dead, False otherwise.
+  - `exists`: return True if loop has been initialized, False otherwise.
+  - `init`: init a new loop control and start it.
+  - `pause`: pause the loop. It will wait until resumed or stopped.
+  - `resume`: resume the loop.
+  - `stop`: definitely stop the loop.
+  - `wait`: wait as long as loop is paused.
+
+.I Arguments
+    \fBCOMMAND\fR - The subcommand to run.
+    \fBNAME   \fR - The name of the loop on which to act.
+
+.I Return codes
+    \fB?\fR - The return code of the subcommand.
+    \fB1\fR - When the subcommand is unknown.
+
+
 
 .SH "EXAMPLES"
 .IP "\fBIn a script:\fR" 4
@@ -21,14 +146,10 @@ This execution control mechanism can even allow to control several loops and inn
   #!/bin/bash
   source $(shellm-core-path)
   shellm-source shellm/loop
-
   loop init "script.loop"
-
   i=0
   while true; do
-
     loop control "script.loop"
-
     echo "$i"
     (( i++ ))
     sleep 1

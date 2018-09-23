@@ -1,0 +1,12 @@
+{
+  "namespace": "shellm",
+  "project": "loop",
+  "title": "Control your loop flow",
+  "subtitle": "Pause, resume or stop loops running in a process, from anywhere.",
+  "readme_sections": [
+    "summary",
+    "demo",
+    "installation",
+    "usage"
+  ]
+}
