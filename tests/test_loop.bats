@@ -99,19 +99,16 @@ teardown() {
   [ "$status" -eq 0 ]
 }
 
-@test "control fails without calling the function directly" {
+@test "control returns 1 with dead loop" {
   run loop control $test_loop
   [ "$status" -eq 1 ]
-  [ "${lines[0]}" = "loop: in order to use 'loop control'," ]
 }
 
-@test "control works when calling the functon directly" {
-  source $(shellm-core-path)
-  shellm-source shellm/loop
+@test "control correctly breaks a loop" {
   breaking_loop() {
     for l in line1 line2; do
       echo $l
-      loop control $test_loop
+      loop control $test_loop || break
     done
   }
   run breaking_loop
@@ -121,8 +118,6 @@ teardown() {
 }
 
 @test "control lets loop run when alive" {
-  source $(shellm-core-path)
-  shellm-source shellm/loop
   loop init $test_loop
   running_loop() {
     for l in line1 line2; do

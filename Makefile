@@ -51,9 +51,6 @@ check-style: ## Run the style tests.
 check-documentation: ## Run the documentation tests.
 	bats tests/quality/test_shellman.bats
 
-check-compatibility: ## Run the compatibility tests.
-	bats tests/quality/test_compatibility.bats
-
 check-quality: ## Run the quality tests.
 	bats tests/quality/*.bats
 

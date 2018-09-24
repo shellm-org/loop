@@ -41,9 +41,9 @@ loop_alive() {
 }
 
 ## \function loop_control <NAME>
-## \function-brief Wait as long as the loop is paused, break when it's dead, continue otherwise.
-## You must use this function in a loop in order for the break keyword
-## to have effect. This function is a shortcut for:
+## \function-brief Wait as long as the loop is paused, return 1 when it's dead.
+## Use this function like this: `loop_control $NAME || break`
+## This function is a shortcut for:
 ##   if loop_paused $NAME; then
 ##     loop_wait $NAME
 ##   elif loop_dead $NAME; then
@@ -54,8 +54,7 @@ loop_control() {
   if loop_paused "$1"; then
     loop_wait "$1"
   elif loop_dead "$1"; then
-    # shellcheck disable=SC2104
-    break
+    return 1
   fi
 }
 
