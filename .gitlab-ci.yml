@@ -6,7 +6,7 @@ style:
   stage: quality
   before_script:
     - basher install gitlab.com/shellm/core
-    - basher link .
+    - (cd .. && basher link loop)
   script:
     - make check-style
 
@@ -15,7 +15,7 @@ documentation:
   stage: quality
   before_script:
     - basher install gitlab.com/shellm/doc
-    - basher link .
+    - (cd .. && basher link loop)
   script:
     - make check-documentation
 
@@ -24,6 +24,6 @@ compatibility:
   stage: quality
   before_script:
     - basher install gitlab.com/shellm/core
-    - basher link .
+    - (cd .. && basher link loop)
   script:
     - make check-compatibility
