@@ -52,3 +52,7 @@ bash-4.3:
 bash-4.4:
   <<: *test_definition
   image: bash:4.4
+
+bash-5.0:
+  <<: *test_definition
+  image: bash:5.0-beta
