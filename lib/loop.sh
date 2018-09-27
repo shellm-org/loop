@@ -18,7 +18,7 @@
 ##   i=0
 ##   while true; do
 ##
-##     loop control "script.loop"
+##     loop control "script.loop" || break
 ##
 ##     echo "$i"
 ##     (( i++ ))
