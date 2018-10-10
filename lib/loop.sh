@@ -146,6 +146,16 @@ loop_wait() {
   done
 }
 
+## \function loop_list
+## \function-brief List the currently existing loops.
+## \function-stdout The existing loops.
+loop_list() {
+  local loop_file
+  for loop_file in $(find "${__loop_datadir}" -type f); do
+    echo "${loop_file##*/}"
+  done
+}
+
 ## \function loop <COMMAND> <NAME>
 ## \function-brief Main wrapper function accepting subcommands.
 ## COMMAND can be the following:
@@ -178,6 +188,7 @@ loop() {
     dead) loop_dead "${var}" ;;
     exists) loop_exists "${var}" ;;
     init) loop_init "${var}" ;;
+    list) loop_list ;;
     pause) loop_pause "${var}" ;;
     paused) loop_paused "${var}" ;;
     resume) loop_resume "${var}" ;;

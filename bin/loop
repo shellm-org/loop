@@ -7,7 +7,7 @@ source $(shellm-core-path)
 shellm-source shellm/loop
 
 if [ $# -eq 0 ]; then
-  doc --print-usage "$0"
+  cat "$(shellm-locate shellm/loop/msg/usage)"
   exit 1
 fi
 
@@ -15,7 +15,7 @@ main() {
   case "$1" in
     ## \option -h, --help
     ## Print this help and exit.
-    -h|--help) doc --print-help "$0"; exit 0 ;;
+    -h|--help) cat "$(shellm-locate shellm/loop/msg/help)"; exit 0 ;;
   esac
 
   loop "$@"
