@@ -151,7 +151,7 @@ loop_wait() {
 ## \function-stdout The existing loops.
 loop_list() {
   local loop_file
-  for loop_file in $(find "${__loop_datadir}" -type f); do
+  find "${__loop_datadir}" -type f | while read -r loop_file; do
     echo "${loop_file##*/}"
   done
 }
