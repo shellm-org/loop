@@ -17,10 +17,7 @@ cache:
     - basher install bats-core/bats-core
     - basher install ztombol/bats-assert
     - basher install ztombol/bats-support
-    - mkdir "$BASHER_ROOT/cellar/packages/shellm" || true
-    - ln -s "$(pwd)" "$BASHER_ROOT/cellar/packages/shellm/loop"
-    - basher _link-bins shellm/loop
-    - basher _deps shellm/loop
+    - basher link "$(pwd)" shellm/loop
 
 .quality_template: &quality_definition
   <<: *job_definition
