@@ -11,7 +11,7 @@
 ## \example-code bash
 ##   #!/bin/bash
 ##   source $(shellm-core-path)
-##   shellm-source shellm/loop
+##   shellm source shellm/loop
 ##
 ##   loop init "script.loop"
 ##

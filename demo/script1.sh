@@ -1,7 +1,7 @@
 #!/bin/bash
 
 source $(shellm-core-path)
-shellm-source shellm/loop
+shellm source shellm/loop
 
 loop init "my loop name"
 

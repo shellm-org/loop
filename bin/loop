@@ -4,7 +4,7 @@
 
 # shellcheck disable=SC1090,SC2046
 source $(shellm-core-path)
-shellm-source shellm/loop
+shellm source shellm/loop
 
 if [ $# -eq 0 ]; then
   cat "$(shellm-locate shellm/loop/msg/usage)"
