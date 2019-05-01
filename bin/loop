@@ -2,12 +2,14 @@
 
 ## \brief Control the flow of your loops (pause/resume/etc.).
 
+set -e
+
 # shellcheck disable=SC1090,SC2046
-source $(shellm-core-path)
+source $(shellm source-path)
 shellm source shellm/loop
 
 if [ $# -eq 0 ]; then
-  cat "$(shellm-locate shellm/loop/msg/usage)"
+  cat "$(shellm locate shellm/loop/msg/usage)"
   exit 1
 fi
 
